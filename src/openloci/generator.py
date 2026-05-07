@@ -16,6 +16,7 @@ def generate_palace(
     name: str,
     skin: str,
     output_dir: Path,
+    *,
     no_input: bool = False,
     overwrite: bool = False,
     extra_context: Optional[dict[str, Any]] = None,
