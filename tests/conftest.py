@@ -2,7 +2,6 @@
 Shared fixtures for OpenLoci tests.
 """
 
-import json
 from pathlib import Path
 
 import pytest

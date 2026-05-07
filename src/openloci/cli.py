@@ -4,8 +4,6 @@ OpenLoci CLI — A filesystem-native collaborative Memory Palace for distributed
 
 from __future__ import annotations
 
-import sys
-from enum import Enum
 from pathlib import Path
 from typing import Annotated, Optional
 
@@ -14,7 +12,6 @@ from rich import print as rprint
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from rich.text import Text
 
 from openloci import __version__
 from openloci.generator import generate_palace
@@ -56,7 +53,8 @@ def main(
     version: Annotated[
         Optional[bool],
         typer.Option(
-            "--version", "-v",
+            "--version",
+            "-v",
             help="Show version and exit.",
             callback=version_callback,
             is_eager=True,
@@ -75,34 +73,41 @@ def main(
 
 # ── new ────────────────────────────────────────────────────────────────────────
 
+
 @app.command()
 def new(
-    name: Annotated[str, typer.Argument(help="Name of the new palace (becomes the directory name).")],
+    name: Annotated[
+        str, typer.Argument(help="Name of the new palace (becomes the directory name).")
+    ],
     skin: Annotated[
         str,
         typer.Option(
-            "--skin", "-s",
+            "--skin",
+            "-s",
             help="Skin to apply (e.g. xfiles, jobhunt, office). Run [bold]openloci skins[/bold] to list available skins.",
         ),
     ] = "base",
     output_dir: Annotated[
         Optional[Path],
         typer.Option(
-            "--output", "-o",
+            "--output",
+            "-o",
             help="Directory to create the palace in. Defaults to current directory.",
         ),
     ] = None,
     no_input: Annotated[
         bool,
         typer.Option(
-            "--no-input", "-n",
+            "--no-input",
+            "-n",
             help="Skip interactive prompts and use defaults.",
         ),
     ] = False,
     overwrite: Annotated[
         bool,
         typer.Option(
-            "--overwrite", "-f",
+            "--overwrite",
+            "-f",
             help="Overwrite if output directory already exists.",
         ),
     ] = False,
@@ -144,10 +149,10 @@ def new(
         err_console.print(f"[bold]✗[/bold] Skin not found: [yellow]{skin}[/yellow]")
         err_console.print(f"  {e}")
         err_console.print("  Run [bold]openloci skins[/bold] to see available skins.")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
     except Exception as e:
         err_console.print(f"[bold]✗[/bold] Generation failed: {e}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
 
     console.print()
     console.print(
@@ -162,6 +167,7 @@ def new(
 
 
 # ── skins ──────────────────────────────────────────────────────────────────────
+
 
 @app.command()
 def skins(
@@ -203,12 +209,11 @@ def skins(
     console.print()
     console.print(table)
     console.print()
-    console.print(
-        "[dim]Use a skin:[/dim] [cyan]openloci new my-palace --skin <name>[/cyan]"
-    )
+    console.print("[dim]Use a skin:[/dim] [cyan]openloci new my-palace --skin <name>[/cyan]")
 
 
 # ── rooms ──────────────────────────────────────────────────────────────────────
+
 
 @app.command()
 def rooms(
@@ -228,10 +233,10 @@ def rooms(
     """
     try:
         info = get_skin_info(skin)
-    except FileNotFoundError:
+    except FileNotFoundError as e:
         err_console.print(f"[bold]✗[/bold] Skin not found: [yellow]{skin}[/yellow]")
         err_console.print("  Run [bold]openloci skins[/bold] to see available skins.")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
 
     room_data = info.get("room_map", [])
     if not room_data:
@@ -264,6 +269,7 @@ def rooms(
 
 
 # ── info ───────────────────────────────────────────────────────────────────────
+
 
 @app.command()
 def info(

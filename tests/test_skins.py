@@ -5,18 +5,19 @@ Run with: pytest tests/ -v
 """
 
 import json
-import re
 from pathlib import Path
 
 import pytest
 
 import sys
+
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from openloci.skins import list_skins, get_skin_path, get_skin_info
 
 
 # ── list_skins ─────────────────────────────────────────────────────────────────
+
 
 class TestListSkins:
     def test_returns_list(self):
@@ -49,6 +50,7 @@ class TestListSkins:
 
 # ── get_skin_path ──────────────────────────────────────────────────────────────
 
+
 class TestGetSkinPath:
     def test_xfiles_path_exists(self):
         assert get_skin_path("xfiles").is_dir()
@@ -70,6 +72,7 @@ class TestGetSkinPath:
 
 # ── get_skin_info ──────────────────────────────────────────────────────────────
 
+
 class TestGetSkinInfo:
     def test_returns_dict(self):
         assert isinstance(get_skin_info("xfiles"), dict)
@@ -83,14 +86,16 @@ class TestGetSkinInfo:
     def test_ten_rooms(self):
         for skin in list_skins():
             info = get_skin_info(skin)
-            assert len(info["room_map"]) == 10, \
+            assert len(info["room_map"]) == 10, (
                 f"Skin '{skin}' has {len(info['room_map'])} rooms, expected 10 (9 + Vestibule)"
+            )
 
     def test_six_characters(self):
         for skin in list_skins():
             info = get_skin_info(skin)
-            assert len(info["characters"]) == 6, \
+            assert len(info["characters"]) == 6, (
                 f"Skin '{skin}' has {len(info['characters'])} characters, expected 6"
+            )
 
     def test_room_map_fields(self):
         for skin in list_skins():
@@ -103,15 +108,13 @@ class TestGetSkinInfo:
             get_skin_info("nonexistent_xyz")
 
 
-
-
 # ── template structure ─────────────────────────────────────────────────────────
+
 
 class TestTemplateStructure:
     def _template_root(self, skin_name: str) -> Path:
         skin_path = get_skin_path(skin_name)
-        candidates = [d for d in skin_path.iterdir()
-                      if d.is_dir() and "cookiecutter" in d.name]
+        candidates = [d for d in skin_path.iterdir() if d.is_dir() and "cookiecutter" in d.name]
         assert len(candidates) == 1
         return candidates[0]
 
@@ -129,7 +132,9 @@ class TestTemplateStructure:
 
     def test_vestibule_has_master_prompt(self):
         for skin in list_skins():
-            assert (self._template_root(skin) / "The Vestibule" / "Principles" / "master_prompt.md").exists()
+            assert (
+                self._template_root(skin) / "The Vestibule" / "Principles" / "master_prompt.md"
+            ).exists()
 
     def test_vestibule_has_characters(self):
         for skin in list_skins():
