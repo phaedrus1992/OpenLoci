@@ -12,6 +12,7 @@ from rich import print as rprint
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
+from rich.text import Text
 
 from openloci import __version__
 from openloci.generator import generate_palace
@@ -293,10 +294,15 @@ def info(
         )
         raise typer.Exit(code=1)
 
-    content = vestibule.read_text()
+    lines = vestibule.read_text().splitlines()
+    preview_limit = 40
+    truncated = lines[:preview_limit]
+    if len(lines) > preview_limit:
+        truncated.append("…")
+    body = Text("\n".join(truncated))
     console.print(
         Panel(
-            content[:1200] + ("\n[dim]…[/dim]" if len(content) > 1200 else ""),
+            body,
             title=f"[bold cyan]{target.name}[/bold cyan] — Vestibule",
             border_style="cyan",
         )
