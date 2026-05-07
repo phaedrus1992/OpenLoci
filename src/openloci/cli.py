@@ -209,9 +209,7 @@ def skins(
     console.print()
     console.print(table)
     console.print()
-    console.print(
-        "[dim]Use a skin:[/dim] [cyan]openloci new my-palace --skin <name>[/cyan]"
-    )
+    console.print("[dim]Use a skin:[/dim] [cyan]openloci new my-palace --skin <name>[/cyan]")
 
 
 # ── rooms ──────────────────────────────────────────────────────────────────────
