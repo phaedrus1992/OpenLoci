@@ -9,10 +9,6 @@ from pathlib import Path
 
 import pytest
 
-import sys
-
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 from openloci.skins import list_skins, get_skin_path, get_skin_info
 
 
