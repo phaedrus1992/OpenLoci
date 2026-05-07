@@ -44,10 +44,7 @@ def get_skin_info(skin_name: str) -> dict[str, Any]:
     Return metadata for a skin. Reads skin.json if present,
     otherwise returns minimal defaults.
     """
-    try:
-        skin_path = get_skin_path(skin_name)
-    except FileNotFoundError:
-        raise
+    skin_path = get_skin_path(skin_name)
 
     meta_file = skin_path / "skin.json"
     if meta_file.exists():
@@ -58,4 +55,5 @@ def get_skin_info(skin_name: str) -> dict[str, Any]:
         "name": skin_name,
         "description": "No description available.",
         "room_map": [],
+        "characters": [],
     }
