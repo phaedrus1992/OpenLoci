@@ -7,7 +7,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Optional
 
-from cookiecutter.main import cookiecutter
+from cookiecutter.main import cookiecutter  # type: ignore[import-untyped]
 
 from openloci.skins import get_skin_path
 

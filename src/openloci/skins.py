@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 # Bundled templates ship alongside the package
 TEMPLATES_DIR = Path(__file__).parent.parent.parent / "templates"
@@ -20,10 +20,7 @@ def list_skins() -> list[str]:
     """Return sorted list of available skin names."""
     if not SKINS_DIR.exists():
         return []
-    return sorted(
-        d.name for d in SKINS_DIR.iterdir()
-        if d.is_dir() and not d.name.startswith(".")
-    )
+    return sorted(d.name for d in SKINS_DIR.iterdir() if d.is_dir() and not d.name.startswith("."))
 
 
 def get_skin_path(skin_name: str) -> Path:
@@ -54,7 +51,7 @@ def get_skin_info(skin_name: str) -> dict[str, Any]:
 
     meta_file = skin_path / "skin.json"
     if meta_file.exists():
-        return json.loads(meta_file.read_text())
+        return cast(dict[str, Any], json.loads(meta_file.read_text()))
 
     # Minimal fallback
     return {
